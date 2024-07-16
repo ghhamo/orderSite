@@ -1,0 +1,42 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1' apply false
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'job'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(22)
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    implementation project(':service')
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.3.1'
+    implementation group: 'org.springframework', name: 'spring-webmvc', version: '6.1.10'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.3.1'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
+}
+
+test {
+    useJUnitPlatform()
+}
